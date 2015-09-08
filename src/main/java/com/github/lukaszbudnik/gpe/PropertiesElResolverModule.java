@@ -17,7 +17,6 @@ import de.odysseus.el.ExpressionFactoryImpl;
 import de.odysseus.el.util.SimpleContext;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.el.ValueExpression;
@@ -33,12 +32,7 @@ public class PropertiesElResolverModule implements Module {
     }
 
     public PropertiesElResolverModule(List<String> propertiesName) throws Exception {
-        this(propertiesName, ((Callable<ELContext>) () -> {
-            SimpleContext context = new SimpleContext();
-            context.setVariable("env", factory.createValueExpression(System.getenv(), Map.class));
-            context.setVariable("properties", factory.createValueExpression(System.getProperties(), Map.class));
-            return context;
-        }).call());
+        this(propertiesName, createSimpleContext());
     }
 
     public PropertiesElResolverModule(List<String> propertiesNames, ELContext elContext) {
@@ -49,7 +43,7 @@ public class PropertiesElResolverModule implements Module {
     @Override
     public void configure(Binder binder) {
         final Binder skippedBinder = binder.skipSources(Names.class);
-        propertiesNames.forEach((propertiesName) -> {
+        for (String propertiesName: propertiesNames) {
             try {
                 Properties properties = new Properties();
                 properties.load(getClass().getResourceAsStream(propertiesName));
@@ -68,6 +62,13 @@ public class PropertiesElResolverModule implements Module {
                 // later on injector will fail if named dependencies will not be resolved
                 // so no panic :)
             }
-        });
+        }
+    }
+
+    private static ELContext createSimpleContext() {
+        SimpleContext context = new SimpleContext();
+        context.setVariable("env", factory.createValueExpression(System.getenv(), Map.class));
+        context.setVariable("properties", factory.createValueExpression(System.getProperties(), Map.class));
+        return context;
     }
 }

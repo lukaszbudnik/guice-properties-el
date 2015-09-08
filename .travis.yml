@@ -2,6 +2,9 @@ language: java
 sudo: false
 jdk:
   - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+  - openjdk6
 env:
   - DEPLOY_USERNAME=travis DEPLOY_PASSWORD=secret
 after_failure:

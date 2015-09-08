@@ -8,10 +8,10 @@ plugins {
 
 group = 'com.github.lukaszbudnik.guice-properties-el'
 archivesBaseName = 'guice-properties-el'
-version = '1.0.0'
+version = '1.1.0'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
 
 repositories {
     mavenCentral()
@@ -40,11 +40,12 @@ test {
 }
 
 dependencies {
-    compile 'com.google.inject:guice:4.0'
+    compile 'com.google.inject:guice:3.0'
     compile 'de.odysseus.juel:juel-api:2.2.7'
     compile 'de.odysseus.juel:juel-impl:2.2.7'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'com.google.guava:guava:18.0'
 }
 
 license {
